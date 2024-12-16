@@ -12,8 +12,9 @@ GREEN="\033[32m"
 YELLOW="\033[33m"
 BLUE="\033[0;34m"
 RESET="\033[0m"
+
 # sleep
-sleep 5
+sleep 3
 
 # گرفتن نام فایل بکاپ به عنوان ورودی
 BACKUP_FILE=$1
