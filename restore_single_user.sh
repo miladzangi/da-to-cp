@@ -16,6 +16,12 @@ RESET="\033[0m"
 # گرفتن نام فایل بکاپ به عنوان ورودی
 BACKUP_FILE=$1
 
+# بررسی اینکه ورودی داده شده است
+if [ -z "$BACKUP_FILE" ]; then
+    echo -e "${YELLOW}Enter the backup file name (must be in the same directory as the script):${RESET}"
+    read BACKUP_FILE
+fi
+
 # بررسی اینکه ورودی داده شده و فایل بکاپ وجود دارد
 if [[ -z "$BACKUP_FILE" || ! -f "$BACKUP_FILE" ]]; then
   echo -e "${RED}Error: Backup file '$BACKUP_FILE' not found or not specified!${RESET}"
@@ -663,4 +669,3 @@ echo -e "
 ║ 📧 Email: ${BLUE}zangimds@gmail.com${RESET}
 ╚═══════════════════════════════════════════════════════════════════════╝
 "
-
