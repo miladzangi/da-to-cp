@@ -17,9 +17,3 @@ chmod +x $SCRIPT_FILE
 # اجرای اسکریپت
 echo "Executing the script..."
 ./$SCRIPT_FILE
-
-# پاک کردن فایل دانلود شده پس از اجرا
-echo "Cleaning up the script..."
-rm -f $SCRIPT_FILE
-
-echo "Done!"
