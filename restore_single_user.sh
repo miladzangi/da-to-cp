@@ -19,7 +19,15 @@ BACKUP_FILE=$1
 # بررسی اینکه ورودی داده شده است
 if [ -z "$BACKUP_FILE" ]; then
     echo -e "${YELLOW}Enter the backup file name (must be in the same directory as the script):${RESET}"
-    read BACKUP_FILE
+
+    # منتظر ماندن برای ورودی با timeout (10 ثانیه)
+    read -t 10 BACKUP_FILE
+
+    # اگر ورودی داده نشده باشد
+    if [ -z "$BACKUP_FILE" ]; then
+        echo -e "${RED}No input received. Exiting.${RESET}"
+        exit 1
+    fi
 fi
 
 # بررسی اینکه ورودی داده شده و فایل بکاپ وجود دارد
