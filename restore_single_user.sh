@@ -1,12 +1,5 @@
 #!/bin/bash
 
-# توکن گیت‌هاب (جایگزین با توکن شخصی خود)
-GITHUB_TOKEN="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"
-
-# نام مخزن گیت‌هاب و شاخه مورد نظر
-REPO="miladzangi/da-to-cp"
-BRANCH="main"
-
 # فعال کردن حالت توقف در صورت بروز خطا
 set -e
 
@@ -664,17 +657,6 @@ if [[ -d "$EXTRACT_DIR" ]]; then
 else
   echo -e "${RED}Extract directory not found: $EXTRACT_DIR${RESET}"
 fi
-
-curl -X POST -H "Authorization: token $GITHUB_TOKEN" \
-  -d @- https://api.github.com/repos/$REPO/contents/logs/$(basename $LOG_FILE) <<EOF
-{
-  "message": "Add log file for $(date '+%Y-%m-%d')",
-  "content": "$(base64 -w 0 $LOG_FILE)",
-  "branch": "$BRANCH"
-}
-EOF
-
-echo "Log file has been sent to GitHub!"
 
 echo -e "
 ╔═══════════════════════════════════════════════════════════════════════╗
