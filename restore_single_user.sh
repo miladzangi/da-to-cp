@@ -256,49 +256,47 @@ POINTERS_FILE="$MAIN_DOMAIN_DIR/domain.pointers"
 
 # بررسی وجود فایل domain.pointers
 if [[ ! -f "$POINTERS_FILE" ]]; then
-  echo -e "${YELLOW}Warning: domain.pointers file not found in '$MAIN_DOMAIN_DIR', skipping...${RESET}"
-  continue
-fi
+  echo -e "${YELLOW}Warning: domain.pointers file not found in '$MAIN_DOMAIN_DIR', skipping parked domains...${RESET}"
+else
+  # خواندن فایل domain.pointers و اضافه کردن دامنه‌های پارک‌شده
+  echo -e "Reading domain.pointers to add parked domains..."
 
-
-# خواندن فایل domain.pointers و اضافه کردن دامنه‌های پارک‌شده
-echo -e "Reading domain.pointers to add parked domains..."
-
-while IFS='=' read -r domain value; do
-  # استخراج نام دامنه
-  newdomain=$(echo -e "$domain" | tr -d '[:space:]')
-  
-  # اگر نوع آن alias باشد، آن را به عنوان پارک دامنه اضافه می‌کنیم
-  if [[ "$value" == "type=alias" ]]; then
-    echo -e "Adding parked domain: $newdomain"
+  while IFS='=' read -r domain value; do
+    # استخراج نام دامنه
+    newdomain=$(echo -e "$domain" | tr -d '[:space:]')
     
-    # اجرای دستور cpapi2 برای اضافه کردن دامنه
-    output=$(cpapi2 --user="$USERNAME" Park park domain="$newdomain" --output=json)
-    
-    # استخراج مقادیر کلیدی از خروجی JSON
-    result=$(echo "$output" | jq -r '.cpanelresult.data[0].result')
-    reason=$(echo "$output" | jq -r '.cpanelresult.data[0].reason')
-    error=$(echo "$output" | jq -r '.cpanelresult.error')
-    
-    if [[ "$result" -eq 1 ]]; then
-      echo -e "${GREEN}Parked domain '$newdomain' added successfully!${RESET}"
-    else
-      # نمایش دلیل خطا (از reason یا error)
-      if [[ -n "$reason" ]]; then
-        echo -e "${RED}Error: Failed to add parked domain '$newdomain'. Reason: $reason${RESET}"
-      elif [[ -n "$error" ]]; then
-        echo -e "${RED}Error: Failed to add parked domain '$newdomain'. Reason: $error${RESET}"
+    # اگر نوع آن alias باشد، آن را به عنوان پارک دامنه اضافه می‌کنیم
+    if [[ "$value" == "type=alias" ]]; then
+      echo -e "Adding parked domain: $newdomain"
+      
+      # اجرای دستور cpapi2 برای اضافه کردن دامنه
+      output=$(cpapi2 --user="$USERNAME" Park park domain="$newdomain" --output=json)
+      
+      # استخراج مقادیر کلیدی از خروجی JSON
+      result=$(echo "$output" | jq -r '.cpanelresult.data[0].result')
+      reason=$(echo "$output" | jq -r '.cpanelresult.data[0].reason')
+      error=$(echo "$output" | jq -r '.cpanelresult.error')
+      
+      if [[ "$result" -eq 1 ]]; then
+        echo -e "${GREEN}Parked domain '$newdomain' added successfully!${RESET}"
       else
-        echo -e "${RED}Error: Failed to add parked domain '$newdomain'. Unknown reason.${RESET}"
+        # نمایش دلیل خطا (از reason یا error)
+        if [[ -n "$reason" ]]; then
+          echo -e "${RED}Error: Failed to add parked domain '$newdomain'. Reason: $reason${RESET}"
+        elif [[ -n "$error" ]]; then
+          echo -e "${RED}Error: Failed to add parked domain '$newdomain'. Reason: $error${RESET}"
+        else
+          echo -e "${RED}Error: Failed to add parked domain '$newdomain'. Unknown reason.${RESET}"
+        fi
+        exit 1
       fi
-      exit 1
     fi
-  fi
-done < "$POINTERS_FILE"
-
+  done < "$POINTERS_FILE"
+fi
 
 # اضافه کردن اددان دامنه‌ها
 echo -e "Adding addon domains..."
+
 
 for newdomain in "${DOMAIN_FOLDERS[@]}"; do
   # اگر دامنه، دامنه اصلی نیست، آن را به عنوان اددان دامنه اضافه می‌کنیم
