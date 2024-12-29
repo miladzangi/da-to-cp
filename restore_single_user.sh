@@ -608,7 +608,8 @@ chown -R $USERNAME:$USERNAME /home/$USERNAME
 sudo sh /root/fixperms.sh -a $USERNAME
 
 # جستجو در مسیر /home/$USERNAME برای فایل‌های خاص
-for file in $(find /home/$USERNAME -type f \( -name ".htaccess" -o -name "aios-bootstrap.php" -o -name "wp-config.php" \)); do
+for file in $(find /home/$USERNAME -type f \( -name ".htaccess" -o -name "aios-bootstrap.php" -o -name "wp-config.php" -o -name ".user.ini" \)); do
+
     echo -e "Processing file: $file"
     
     # استخراج مسیر والد از فایل
