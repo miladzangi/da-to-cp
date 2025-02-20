@@ -248,8 +248,6 @@ MAIN_DOMAIN_DIR="$BACKUP_FOLDER/$DOMAIN"
 # بررسی اینکه پوشه دامنه اصلی وجود دارد
 if [[ ! -d "$MAIN_DOMAIN_DIR" ]]; then
   echo -e "${YELLOW}Warning: Domain folder '$MAIN_DOMAIN_DIR' not found!${RESET}"
-else
-  # ادامه اسکریپت
 fi
 
 # مسیر فایل domain.pointers در پوشه دامنه اصلی
