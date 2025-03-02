@@ -462,7 +462,7 @@ for sql_file in "$BACKUP_FOLDER"/*.sql; do
     # ایمپورت فایل SQL به دیتابیس
     mysql --force "$db" < "$sql_file" || {
       echo -e "${RED}Error: Failed to import SQL file '$sql_file' into database '$db'!${RESET}";
-      exit 1;
+
     }
     echo -e "${GREEN}SQL file '$sql_file' imported into database '$db' successfully!${RESET}"
   else
