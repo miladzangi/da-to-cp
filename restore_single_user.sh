@@ -97,6 +97,21 @@ else
     mkdir -p "$EXTRACT_DIR" || { echo -e "${RED}Error: Failed to create extract directory '$EXTRACT_DIR'${RESET}"; exit 1; }
 fi
 
+# بررسی و نصب zstd در صورت عدم وجود
+if ! command -v zstd &>/dev/null; then
+    echo -e "${YELLOW}zstd is not installed. Installing...${RESET}"
+    if [[ -f /etc/debian_version ]]; then
+        sudo apt update && sudo apt install -y zstd
+    elif [[ -f /etc/redhat-release ]]; then
+        sudo yum install -y zstd
+    elif [[ -f /etc/arch-release ]]; then
+        sudo pacman -Sy --noconfirm zstd
+    else
+        echo -e "${RED}Unsupported OS. Please install zstd manually.${RESET}"
+        exit 1
+    fi
+fi
+
 # بررسی فلگ اکسترکت
 if [[ "$SKIP_EXTRACTION" != true ]]; then
     # استخراج فایل بکاپ به دایرکتوری جدید
@@ -110,6 +125,7 @@ if [[ "$SKIP_EXTRACTION" != true ]]; then
 else
     echo -e "${YELLOW}Extraction skipped. Continuing with existing directory.${RESET}"
 fi
+
 
 # مسیر پوشه backup در داخل فایل استخراج شده
 BACKUP_FOLDER="$EXTRACT_DIR/backup"
